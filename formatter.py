@@ -11,12 +11,16 @@ removing_texts = [
     '.',
     'UTC:',
 ]
+# Instruction:
+# h2 should be the update/event item title
+# h5 should be the date time of the event
+# h3 is what idk \ :v /
+cases = [
+    re.compile('<h2>(.+)</h2>'),
+    re.compile('<h3>(.+)</h3>'),
+    re.compile('<h5>(.+)</h5>')
+]
 
-update_item = re.compile('<h2>(.+)</h2>')
-update_item_child = re.compile('<h3>(.+)</h3>')
-update_item_date_item = re.compile('<h5>(.+)</h5>')
-
-cases = [update_item, update_item_child, update_item_date_item]
 file = io.open('wordpress_parsed.html', 'r', encoding='utf-8')
 lines = file.readlines()
 
@@ -71,16 +75,18 @@ def parse_date_text(string):
 data = ''
 first_match = False
 for index, line in enumerate(lines):
+    # ending the parse
     if len(lines) <= index + 1:
         data += '[/su_spoiler]'
         break
+    # matching items
     matched1, matched_item1 = matching(line)
     matched2, matched_item2 = matching(lines[index + 1])
 
     # update item
     if matched1 and matched_item1 == 0:
         text1 = matched1.group(1)
-        # check if is update item date item
+        # check if updating item is date item
         text2 = matched2.group(1) if matched2 else None
         date_text = ''
         if text2:
