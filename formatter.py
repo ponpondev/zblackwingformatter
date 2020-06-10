@@ -1,6 +1,5 @@
 import io
 import re
-
 import pyperclip
 from dateparser import parse
 from slugify import slugify
@@ -10,6 +9,7 @@ removing_texts = [
     'during the times listed below',
     '.',
     'UTC:',
+    'Available'
 ]
 # Instruction:
 # h2 should be the update/event item title
